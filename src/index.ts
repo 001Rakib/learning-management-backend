@@ -12,7 +12,7 @@ import morgan from "morgan";
 dotenv.config();
 const isProduction = process.env.NODE_ENV === "production";
 
-if (isProduction) {
+if (!isProduction) {
   dynamoose.aws.ddb.local();
 }
 const app = express();
@@ -23,3 +23,14 @@ app.use(morgan("common"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
+// ROUTES
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+// SERVER
+const port = process.env.PORT || 3000;
+if (!isProduction) {
+  app.listen(port, () => {
+    console.log(`Server is running on ${port}`);
+  });
+}
